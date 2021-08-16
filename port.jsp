@@ -8,6 +8,7 @@
 	src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx5984ad8526554fe4a7e46987ba0c0d97"></script>
 <script type="text/javascript">
 	var map;
+	var marker;
 	// 페이지가 로딩이 된 후 호출하는 함수입니다.
 	function initTmap(){
 		// map 생성
@@ -20,12 +21,13 @@
 			height: "400px"
 		});
 		//마커생성
-		var marker = new Tmapv2.Marker({
+		    marker = new Tmapv2.Marker({
 			position: new Tmapv2.LatLng(37.571518, 126.983677), //Marker의 중심좌표 설정.
-			draggable : true,
-			icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_o.png",
+			draggable : false,
+			
 			map: map //Marker가 표시될 Map 설정.
 		});
+		
 		var content = "<div style='position: static; display: flex; font-size: 14px; box-shadow: 5px 5px 5px #00000040; border-radius: 10px; flex-direction: column; top: 180px; left : 800px; width : 300px; background-color: #FFFFFF; padding: 5px;'>"+
 					   "<div class='img-box' style=' position: relative; width: 100%; height: 90px; border-radius: 10px; background: #f5f5f5 url(resources/images/sample/p-sk-logo.png) no-repeat center;'>"+
 					   "<a href='javascript:void(0)' onclick='onClose()' class='btn-close' style='position: absolute; top: 10px; right: 10px; display: block; width: 15px; height: 15px; background: url(resources/images/sample/btn-close-b.svg) no-repeat center;'></a>"+
@@ -42,15 +44,11 @@
 					   "<span class='old-addr' style='color: #707070;'>B동 24, 25,26층(공평동, 센트로폴리스빌딩)</span>"+
 					   "</p>"+
 					   "</div>"+
-					   "</div>";
-					   
-		var content2 = "<input type='button' value='활 성 화' onclick=marker.setIcon('http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_x.png')/>"+
-		               "<input type='button' value='비활성화' onclick='marker.setIcon('http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_x.png')'/>"
-			           "</form>";
+					   "</div>";                     
 
 		//Marker에 클릭이벤트 등록.
 		marker.addListener("click", function(evt) {
-			document.getElementById("result").innerHTML = 'Mouse Click!';
+			//document.getElementById("result").innerHTML = 'Mouse Click!';
 			//Popup 객체 생성.
 			if (judgment === false) {
 				judgment = true;
@@ -71,35 +69,34 @@
 		});
 		//Marker에 우클릭이벤트 등록
 		marker.addListener("contextmenu", function(evt) {
-			document.getElementById("result").innerHTML = 'Mouse contextmenu!';
-			/*if((marker.getIcon()).equals("http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_x.png"))
-			  marker.setIcon("http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_o.png");
-			else
-			  marker.setIcon("http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_x.png");*/
+			//document.getElementById("result").innerHTML = 'Mouse contextmenu!';						                                   
 			  if (judgment === false) {
 					judgment = true;
 
 					infoWindow = new Tmapv2.InfoWindow({
 						position: new Tmapv2.LatLng(37.571518, 126.983677), //Popup 이 표출될 맵 좌표
-						content: content2, //Popup 표시될 text
+						content: "<input type='button' value='활 성 화' onclick='icon_blue()'/>"+
+	                             "<input type='button' value='비활성화' onclick='icon_red()'/>", //버튼 생성
 						type: 2, //Popup의 type 설정.
 						//map: map //Popup이 표시될 맵 객체
 					});
 					infoWindow.setMap(map);
+					
 				}
 				else {
 					judgment = false;
 					infoWindow.setMap(null);
 
 				}
+            
 		});
 		//Marker에 마우스가 마커 영역에 들어왔을때 이벤트 등록.
 		marker.addListener("mouseenter", function(evt) {
-			document.getElementById("result").innerHTML = 'Mouse Enter!';
+			//document.getElementById("result").innerHTML = 'Mouse Enter!';
 		});
 		//Marker에 마우스가 마커를 벗어났을때 이벤트 등록.
 		marker.addListener("mouseleave", function(evt) {
-			document.getElementById("result").innerHTML = 'Mouse Leave!';
+			//document.getElementById("result").innerHTML = 'Mouse Leave!';
 		});
 
 		//Marker draggable: true일때, 마커가 움직일때 이벤트 등록
@@ -130,7 +127,14 @@
 	function onClose(popup){
 		infoWindow.setVisible(false);
 	}
-
+	
+    function icon_red(){
+         marker.setIcon("http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_x.png");
+		}
+    function icon_blue(){
+    	marker.setIcon("http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png");
+}
+		
 </script>
 </head>
 <body onload="initTmap()"><!-- 맵 생성 실행 -->
